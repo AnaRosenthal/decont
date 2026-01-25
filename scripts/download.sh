@@ -2,7 +2,7 @@
 #This script should download the file specified in the first argument ($1)
 #And place it in the directory specified in the second argument ($2)
 
-if [ "$#" -lt 2 ]
+if [ "$#" -lt 2 ] || [ "$#" -gt 4 ]
 #Si no recibe los argumentos correctos sale del programa
 then
     echo "Usage: $0 <url> <output_directory> [uncompress] [filter_word]"
