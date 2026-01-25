@@ -3,7 +3,7 @@
 # stored in the output directory specified by the second argument ($2).
 # The directory containing the samples is indicated by the first argument ($1).
 
-# Comprobar argumentos
+#Comprobar argumentos
 if [ "$#" -ne 3 ]
 #Si no recibe los argumentos correctos sale del programa
 then
@@ -15,5 +15,14 @@ input_dir=$1
 output_dir=$2
 sampleid=$3
 
-# Crear el directorio de salida si no existe
+#Crear el directorio de salida si no existe
 mkdir -p "$output_dir"
+
+#Nombre del archivo final
+merged_file="$output_dir/$sampleid.fastq.gz"
+
+#Combinar todos los FASTQ que contengan el sampleid
+echo "Merging all FASTQs for sample $sampleid..."
+cat "$input_dir"/${sampleid}*.fastq.gz > "$merged_file"
+echo "Merged file created at $merged_file"
+echo
