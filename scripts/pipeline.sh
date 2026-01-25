@@ -1,7 +1,8 @@
+
 #Download all the files specified in data/filenames
-for url in $(<list_of_urls>) #TODO
+for url in $(<data/urls)
 do
-    bash scripts/download.sh $url data
+    bash scripts/download.sh "$url" data
 done
 
 # Download the contaminants fasta file, uncompress it, and
