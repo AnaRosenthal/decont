@@ -5,14 +5,17 @@ do
     bash scripts/download.sh "$url" data
 done
 
+
 # Download the contaminants fasta file, uncompress it, and
 # filter to remove all small nuclear RNAs
 bash scripts/download.sh \
 https://bioinformatics.cnio.es/data/courses/decont/contaminants.fasta.gz \
 ./res yes snRNA
 
+
 # Index the contaminants file
 bash scripts/index.sh res/contaminants.fasta res/contaminants_idx
+
 
 # Merge the samples into a single file
 for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sort | uniq)
@@ -20,9 +23,28 @@ do
     bash scripts/merge_fastqs.sh data out/merged $sid
 done
 
+
 # TODO: run cutadapt for all merged files
-# cutadapt -m 18 -a TGGAATTCTCGGGTGCCAAGG --discard-untrimmed \
-#     -o <trimmed_file> <input_file> > <log_file>
+#Quitar los adaptadores de los FASTQ con cutadapt
+echo "Running cutadapt..."
+mkdir -p log/cutadapt 
+mkdir -p out/trimmed
+#Bucle que recorre todos los archivos merged
+for merged_file in out/merged/*.fastq.gz
+do
+    sampleid=$(basename "$merged_file" .merged.fastq.gz)
+    # Definir el nombre del archivo de salida y del log
+    trimmed_file="out/trimmed/${sampleid}.trimmed.fastq.gz"
+    log_file="log/cutadapt/${sampleid}.log"
+    # Ejecutar cutadapt
+    cutadapt \
+        -m 18 \
+        -a TGGAATTCTCGGGTGCCAAGG \
+        --discard-untrimmed \
+        -o "$trimmed_file" "$merged_file" > "$log_file"
+    echo
+done
+
 
 # TODO: run STAR for all trimmed files
 for fname in out/trimmed/*.fastq.gz
@@ -34,6 +56,7 @@ do
     #    --outReadsUnmapped Fastx --readFilesIn <input_file> \
     #    --readFilesCommand gunzip -c --outFileNamePrefix <output_directory>
 done 
+
 
 # TODO: create a log file containing information from cutadapt and star logs
 # (this should be a single log file, and information should be *appended* to it on each run)
