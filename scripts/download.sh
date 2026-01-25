@@ -14,9 +14,11 @@ outdir=$2
 
 #Descargar el archivo ($1) y guardarlo en la carpeta especificada ($2)
 echo "Downloading file..."
-mkdir -p $outdir
-wget -P $outdir $url
+mkdir -p "$outdir"
+wget -P "$outdir" "$url"
 echo
+
+filename=$(basename "$url")
 
 # And *optionally*:
 # - Uncompress the downloaded file with gunzip if the third argument ($3) contains the word "yes"
@@ -25,8 +27,8 @@ echo
 if [ "$#" -ge 3 ] && [ "$3" == "yes" ]
 then
     echo "Uncompressing file..."
-    filename=$(basename $url)
-    gunzip $outdir/$filename
+    gunzip "$outdir/$filename"
+    filename=$(basename "$filename" .gz)
     echo
 fi
 
@@ -45,7 +47,6 @@ fi
 if [ "$#" -eq 4 ]
 then
     filter_word=$4
-    filename=$(basename "$url")
 
     #Comprobar que el archivo está descomprimido
     if [[ "$filename" == *.gz ]]
