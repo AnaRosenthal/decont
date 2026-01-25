@@ -74,3 +74,11 @@ done
 # - cutadapt: Reads with adapters and total basepairs
 # - star: Percentages of uniquely mapped reads, reads mapped to multiple loci, and to too many loci
 # tip: use grep to filter the lines you're interested in
+
+#MultiQC - resumen de todos los análisis
+echo "Running MultiQC..."
+mkdir -p out/multiqc
+multiqc -o out/multiqc . 
+echo
+
+echo "############ Pipeline finished at $(date +'%H:%M:%S') ##############"
