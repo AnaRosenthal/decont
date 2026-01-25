@@ -1,4 +1,6 @@
 
+echo "############ Starting pipeline at $(date +'%H:%M:%S')... ##############"
+
 #Download all the files specified in data/filenames
 for url in $(<data/urls)
 do
@@ -64,7 +66,7 @@ do
         --readFilesCommand gunzip -c \
         --outFileNamePrefix "$outdir/"
     echo
-done 
+done
 
 
 # TODO: create a log file containing information from cutadapt and star logs
