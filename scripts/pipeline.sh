@@ -47,14 +47,23 @@ done
 
 
 # TODO: run STAR for all trimmed files
+#Alineamiento con STAR
+echo "Running STAR alignment..."
 for fname in out/trimmed/*.fastq.gz
 do
     # you will need to obtain the sample ID from the filename
-    sid=#TODO
-    # mkdir -p out/star/$sid
-    # STAR --runThreadN 4 --genomeDir res/contaminants_idx \
-    #    --outReadsUnmapped Fastx --readFilesIn <input_file> \
-    #    --readFilesCommand gunzip -c --outFileNamePrefix <output_directory>
+    sid=$(basename "$fname" .trimmed.fastq.gz)
+    outdir="out/star/$sid"
+    mkdir -p "$outdir"
+    #Ejecutar STAR
+    STAR \
+        --runThreadN 4 \
+        --genomeDir res/contaminants_idx \
+        --outReadsUnmapped Fastx \
+        --readFilesIn "$fname" \
+        --readFilesCommand gunzip -c \
+        --outFileNamePrefix "$outdir/"
+    echo
 done 
 
 
