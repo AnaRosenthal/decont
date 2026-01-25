@@ -20,9 +20,9 @@ bash scripts/index.sh res/contaminants.fasta res/contaminants_idx
 
 
 # Merge the samples into a single file
-for sid in $(ls data/*.fastq.gz | cut -d "-" -f1 | sort | uniq)
+for sid in $(basename -a data/*.fastq.gz | cut -d "-" -f1 | sort | uniq)
 do
-    bash scripts/merge_fastqs.sh data out/merged $sid
+    bash scripts/merge_fastqs.sh data out/merged "$sid"
 done
 
 
