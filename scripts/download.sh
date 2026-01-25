@@ -9,8 +9,8 @@ then
     exit 1
 fi
 
-url= $1
-outdir= $2
+url=$1
+outdir=$2
 
 #Descargar el archivo ($1) y guardarlo en la carpeta especificada ($2)
 echo "Downloading file..."
@@ -25,7 +25,7 @@ echo
 if [ "$#" -ge 3 ] && [ "$3" == "yes" ]
 then
     echo "Uncompressing file..."
-    filename= $(basename $url)
+    filename=$(basename $url)
     gunzip $outdir/$filename
     echo
 fi
@@ -41,3 +41,22 @@ fi
 #       CCAGGATTTACAGACTTTAAA
 #       If $4 == "another" only the **first two sequence** should be output
 
+#Comprobar si hay cuarto argumento para filtrar
+if [ "$#" -eq 4 ]
+then
+    filter_word=$4
+    filename=$(basename "$url")
+
+    #Comprobar que el archivo está descomprimido
+    if [[ "$filename" == *.gz ]]
+    then
+        echo "File is compressed. Can not filter sequences."
+        exit 1
+    fi
+    
+    #Excluir las secuencias que contienen la palabra en el encabezado
+    echo "Filtering sequence..."
+    grep -A 1 -v ">$filter_word" "$outdir/$filename" > "$outdir/tmp.fasta"
+    mv "$outdir/tmp.fasta" "$outdir/$filename"
+    echo
+fi
