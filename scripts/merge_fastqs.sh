@@ -19,11 +19,12 @@ sampleid=$3
 mkdir -p "$output_dir"
 
 #Nombre del archivo final
-merged_file="$output_dir/$sampleid.fastq.gz"
+merged_file="$output_dir/${sampleid}.merged.fastq.gz"
 
 #Buscar los archivos que coincidan con el sampleid y si no hay ninguno salir
 files=("$input_dir"/${sampleid}*.fastq.gz)
-if [ ${#files[@]} -eq 0 ]; then
+if [ ${#files[@]} -eq 0 ]; 
+then
     echo "No FASTQ files found for sample $sampleid in $input_dir"
     exit 1
 fi
