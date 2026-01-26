@@ -15,7 +15,7 @@ outdir=$2
 #Descargar el archivo ($1) y guardarlo en la carpeta especificada ($2)
 echo "Downloading file..."
 mkdir -p "$outdir"
-wget -P "$outdir" "$url"
+wget -nc -P "$outdir" "$url"
 echo
 
 filename=$(basename "$url")
