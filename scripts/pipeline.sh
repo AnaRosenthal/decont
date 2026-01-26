@@ -77,6 +77,7 @@ done
 
 #MultiQC - resumen de todos los análisis
 echo "Running MultiQC..."
+rm -rf out/multiqc
 mkdir -p out/multiqc
 multiqc -o out/multiqc . 
 echo
