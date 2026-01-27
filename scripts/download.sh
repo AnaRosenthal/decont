@@ -57,7 +57,15 @@ then
     
     #Excluir las secuencias que contienen la palabra en el encabezado
     echo "Filtering sequence..."
-    grep -A 1 -v ">$filter_word" "$outdir/$filename" > "$outdir/tmp.fasta"
+    awk -v word="$filter_word" '
+    BEGIN { IGNORECASE=1 }
+    /^>/ {
+        print_seq = ($0 !~ word)
+    }
+    print_seq {
+        print
+    }
+    ' "$outdir/$filename" > "$outdir/tmp.fasta"
     mv "$outdir/tmp.fasta" "$outdir/$filename"
     echo
 fi

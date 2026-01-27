@@ -12,7 +12,7 @@ done
 # filter to remove all small nuclear RNAs
 bash scripts/download.sh \
     https://bioinformatics.cnio.es/data/courses/decont/contaminants.fasta.gz \
-    ./res yes snRNA
+    ./res yes "snRNA|small nuclear RNA"
 
 
 # Index the contaminants file
@@ -34,7 +34,7 @@ mkdir -p out/trimmed
 #Bucle que recorre todos los archivos merged
 for merged_file in out/merged/*.fastq.gz
 do
-    sampleid=$(basename "$merged_file" .merged.fastq.gz)
+    sampleid=$(basename "$merged_file" .fastq.gz)
     # Definir el nombre del archivo de salida y del log
     trimmed_file="out/trimmed/${sampleid}.trimmed.fastq.gz"
     log_file="log/cutadapt/${sampleid}.log"
