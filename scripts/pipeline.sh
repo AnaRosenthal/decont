@@ -69,17 +69,48 @@ do
 done
 
 
-# TODO: create a log file containing information from cutadapt and star logs
-# (this should be a single log file, and information should be *appended* to it on each run)
-# - cutadapt: Reads with adapters and total basepairs
-# - star: Percentages of uniquely mapped reads, reads mapped to multiple loci, and to too many loci
-# tip: use grep to filter the lines you're interested in
-
 #MultiQC - resumen de todos los análisis
 echo "Running MultiQC..."
 rm -rf out/multiqc
 mkdir -p out/multiqc
 multiqc -o out/multiqc . 
 echo
+
+
+# TODO: create a log file containing information from cutadapt and star logs
+# (this should be a single log file, and information should be *appended* to it on each run)
+# - cutadapt: Reads with adapters and total basepairs
+# - star: Percentages of uniquely mapped reads, reads mapped to multiple loci, and to too many loci
+# tip: use grep to filter the lines you're interested in
+
+echo "Creating pipeline log..."
+mkdir -p log
+pipeline_log="log/pipeline.log"
+
+echo "######## Pipeline run on $(date) ########" >> "$pipeline_log"
+
+#Información de cutadapt
+echo "Cutadapt summary:" >> "$pipeline_log"
+for clog in log/cutadapt/*.log
+do
+    sid=$(basename "$clog" .log)
+    echo "Sample: $sid" >> "$pipeline_log"
+    grep -E "Reads with adapters:" "$clog" >> "$pipeline_log"
+    grep -E "Total basepairs:" "$clog" >> "$pipeline_log"
+    echo "" >> "$pipeline_log"
+done
+
+#Información de STAR
+echo "STAR alignment summary:" >> "$pipeline_log"
+for slog in out/star/*/Log.final.out
+do
+    sid=$(basename "$(dirname "$slog")")
+    echo "Sample: $sid" >> "$pipeline_log"
+    grep -E "Uniquely mapped reads %:" "$slog" >> "$pipeline_log"
+    grep -E "% of reads mapped to multiple loci:" "$slog" >> "$pipeline_log"
+    grep -E "% of reads mapped to too many loci:" "$slog" >> "$pipeline_log"
+    echo "" >> "$pipeline_log"
+done
+
 
 echo "############ Pipeline finished at $(date +'%H:%M:%S') ##############"
