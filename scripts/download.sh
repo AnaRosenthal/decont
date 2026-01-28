@@ -27,7 +27,7 @@ filename=$(basename "$url")
 if [ "$#" -ge 3 ] && [ "$3" == "yes" ]
 then
     echo "Uncompressing file..."
-    gunzip "$outdir/$filename"
+    gunzip -k "$outdir/$filename"
     filename=$(basename "$filename" .gz)
     echo
 fi
