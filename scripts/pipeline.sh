@@ -87,6 +87,7 @@ echo "Creating pipeline log..."
 mkdir -p log
 pipeline_log="log/pipeline.log"
 
+echo "" >> "$pipeline_log"
 echo "######## Pipeline run on $(date) ########" >> "$pipeline_log"
 
 #Información de cutadapt
@@ -95,8 +96,8 @@ for clog in log/cutadapt/*.log
 do
     sid=$(basename "$clog" .log)
     echo "Sample: $sid" >> "$pipeline_log"
-    grep -E "Reads with adapters:" "$clog" >> "$pipeline_log"
-    grep -E "Total basepairs:" "$clog" >> "$pipeline_log"
+    grep -E "Reads with adapters" "$clog" >> "$pipeline_log"
+    grep -E "Total basepairs" "$clog" >> "$pipeline_log"
     echo "" >> "$pipeline_log"
 done
 
