@@ -106,9 +106,9 @@ for slog in out/star/*/Log.final.out
 do
     sid=$(basename "$(dirname "$slog")")
     echo "Sample: $sid" >> "$pipeline_log"
-    grep -E "Uniquely mapped reads %:" "$slog" >> "$pipeline_log"
-    grep -E "% of reads mapped to multiple loci:" "$slog" >> "$pipeline_log"
-    grep -E "% of reads mapped to too many loci:" "$slog" >> "$pipeline_log"
+    grep -E "Uniquely mapped reads %" "$slog" | sed 's/^[[:space:]]*//' >> "$pipeline_log"
+    grep -E "% of reads mapped to multiple loci" "$slog" | sed 's/^[[:space:]]*//' >> "$pipeline_log"
+    grep -E "% of reads mapped to too many loci" "$slog" | sed 's/^[[:space:]]*//' >> "$pipeline_log"
     echo "" >> "$pipeline_log"
 done
 
