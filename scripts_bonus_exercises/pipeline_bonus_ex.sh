@@ -2,27 +2,21 @@
 echo "############ Starting pipeline at $(date +'%H:%M:%S')... ##############"
 
 # Download all the files specified in data/urls
-while read -r url; do
+while read -r url
+do
     file="data/$(basename "$url")"
-
     #Descargar las muestras
     wget -nc -P data "$url"
+    #MD5 check
+    remote_md5=$(wget -qO- "${url}.md5" | awk '{print $1}')
+    local_md5=$(md5sum "$file" | awk '{print $1}')
 
-    #Ver si el .md5 existe antes de descargarlo
-    md5_url="${url}.md5"
-    md5_file="${file}.md5"
-    if wget --spider -q "$md5_url"; then
-        wget -nc -P data "$md5_url"
-        #Verificar MD5
-        remote_md5=$(awk '{print $1}' "$md5_file")
-        local_md5=$(md5sum "$file" | awk '{print $1}')
-        if [ "$remote_md5" = "$local_md5" ]; then
-            echo "MD5 OK for $file"
-        else
-            echo "MD5 MISMATCH for $file"
-        fi
+    if [ "$remote_md5" = "$local_md5" ]
+    then
+        echo "MD5 OK for $file"
+        echo
     else
-        echo "No MD5 file available for $file, skipping MD5 check"
+        echo "MD5 MISMATCH for $file"
         echo
     fi
 done < data/urls
