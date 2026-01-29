@@ -69,14 +69,6 @@ do
 done
 
 
-#MultiQC - resumen de todos los análisis
-echo "Running MultiQC..."
-rm -rf out/multiqc
-mkdir -p out/multiqc
-multiqc -o out/multiqc . 
-echo
-
-
 # TODO: create a log file containing information from cutadapt and star logs
 # (this should be a single log file, and information should be *appended* to it on each run)
 # - cutadapt: Reads with adapters and total basepairs
